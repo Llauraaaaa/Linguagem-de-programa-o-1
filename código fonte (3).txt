@@ -1,0 +1,56 @@
+ALGORITMO PalavraCruzada
+VARIÁVEIS
+    matriz: ARRAY[15][15] DE CARACTERE
+    palavras: ARRAY[5] DE STRING = {"PROGRAMACAO", "ALGORITMO", "COMPUTADOR", "LINGUAGEM", "DADOS"}
+    direcoes: ARRAY[2] DE INTEIRO = {0, 1} // 0=horizontal, 1=vertical
+
+INÍCIO
+    // Inicializar matriz com pontos
+    PARA i DE 0 ATÉ 14 FAÇA
+        PARA j DE 0 ATÉ 14 FAÇA
+            matriz[i][j] ← '.'
+        FIM PARA
+    FIM PARA
+
+    // Inserir palavras
+    PARA cada palavra EM palavras FAÇA
+        direcao ← direcoes[ALEATÓRIO(0,1)]
+        linha ← ALEATÓRIO(0, 14 - TAMANHO(palavra)*direcao)
+        coluna ← ALEATÓRIO(0, 14 - TAMANHO(palavra)*(1-direcao))
+        
+        // Verificar se posição é válida
+        posicaoValida ← VERDADEIRO
+        PARA k DE 0 ATÉ TAMANHO(palavra)-1 FAÇA
+            SE (matriz[linha + k*direcao][coluna + k*(1-direcao)] ≠ '.' E
+               matriz[linha + k*direcao][coluna + k*(1-direcao)] ≠ palavra[k]) ENTÃO
+                posicaoValida ← FALSO
+            FIM SE
+        FIM PARA
+        
+        SE posicaoValida ENTÃO
+            // Inserir palavra
+            PARA k DE 0 ATÉ TAMANHO(palavra)-1 FAÇA
+                matriz[linha + k*direcao][coluna + k*(1-direcao)] ← palavra[k]
+            FIM PARA
+        SENÃO
+            // Tentar novamente com outros parâmetros
+        FIM SE
+    FIM PARA
+
+    // Preencher espaços vazios com letras aleatórias
+    PARA i DE 0 ATÉ 14 FAÇA
+        PARA j DE 0 ATÉ 14 FAÇA
+            SE matriz[i][j] = '.' ENTÃO
+                matriz[i][j] ← CARACTERE_ALEATÓRIO('A', 'Z')
+            FIM SE
+        FIM PARA
+    FIM PARA
+
+    // Exibir palavra cruzada
+    PARA i DE 0 ATÉ 14 FAÇA
+        PARA j DE 0 ATÉ 14 FAÇA
+            ESCREVER(matriz[i][j] + " ")
+        FIM PARA
+        ESCREVER("\n")
+    FIM PARA
+FIM

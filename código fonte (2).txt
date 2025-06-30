@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+#include <ctype.h>
+
+#define TAMANHO 15
+#define NUM_PALAVRAS 5
+
+void inicializarMatriz(char matriz[TAMANHO][TAMANHO]);
+void inserirPalavras(char matriz[TAMANHO][TAMANHO], const char *palavras[NUM_PALAVRAS]);
+void preencherEspacosVazios(char matriz[TAMANHO][TAMANHO]);
+void exibirPalavraCruzada(char matriz[TAMANHO][TAMANHO]);
+
+int main() {
+    srand(time(NULL));
+    
+    char matriz[TAMANHO][TAMANHO];
+    const char *palavras[NUM_PALAVRAS] = {
+        "PROGRAMACAO", "ALGORITMO", "COMPUTADOR", "LINGUAGEM", "DADOS"
+    };
+    
+    inicializarMatriz(matriz);
+    inserirPalavras(matriz, palavras);
+    preencherEspacosVazios(matriz);
+    exibirPalavraCruzada(matriz);
+    
+    return 0;
+}
+
+void inicializarMatriz(char matriz[TAMANHO][TAMANHO]) {
+    for(int i = 0; i < TAMANHO; i++) {
+        for(int j = 0; j < TAMANHO; j++) {
+            matriz[i][j] = '.';
+        }
+    }
+}
+
+void inserirPalavras(char matriz[TAMANHO][TAMANHO], const char *palavras[NUM_PALAVRAS]) {
+    for(int p = 0; p < NUM_PALAVRAS; p++) {
+        int tamanho = strlen(palavras[p]);
+        int direcao = rand() % 2; // 0 = horizontal, 1 = vertical
+        int tentativas = 0;
+        int inserida = 0;
+        
+        while(!inserida && tentativas < 50) {
+            int linha = rand() % (TAMANHO - (direcao ? tamanho : 0));
+            int coluna = rand() % (TAMANHO - (direcao ? 0 : tamanho));
+            int posicaoValida = 1;
+            
+            // Verificar se a posição é válida
+            for(int k = 0; k < tamanho; k++) {
+                int x = linha + (direcao ? k : 0);
+                int y = coluna + (direcao ? 0 : k);
+                
+                if(matriz[x][y] != '.' && matriz[x][y] != palavras[p][k]) {
+                    posicaoValida = 0;
+                    break;
+                }
+            }
+            
+            // Inserir a palavra se a posição for válida
+            if(posicaoValida) {
+                for(int k = 0; k < tamanho; k++) {
+                    int x = linha + (direcao ? k : 0);
+                    int y = coluna + (direcao ? 0 : k);
+                    matriz[x][y] = palavras[p][k];
+                }
+                inserida = 1;
+            }
+            
+            tentativas++;
+        }
+    }
+}
+
+void preencherEspacosVazios(char matriz[TAMANHO][TAMANHO]) {
+    for(int i = 0; i < TAMANHO; i++) {
+        for(int j = 0; j < TAMANHO; j++) {
+            if(matriz[i][j] == '.') {
+                matriz[i][j] = 'A' + rand() % 26;
+            }
+        }
+    }
+}
+
+void exibirPalavraCruzada(char matriz[TAMANHO][TAMANHO]) {
+    printf("\n=== PALAVRA CRUZADA ===\n\n");
+    for(int i = 0; i < TAMANHO; i++) {
+        for(int j = 0; j < TAMANHO; j++) {
+            printf("%c ", matriz[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}

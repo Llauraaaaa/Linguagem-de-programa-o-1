@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+typedef struct {
+    char nome[50];
+    char sobrenome[50];
+    int idade;
+} Pessoa;
+
+int main() {
+    // 1. Declaração de variáveis
+    char texto[100];
+    Pessoa usuario;
+    
+    // 2. Entrada de dados
+    printf("Digite uma frase: ");
+    fgets(texto, sizeof(texto), stdin);
+    texto[strcspn(texto, "\n")] = '\0'; // Remove a quebra de linha
+    
+    printf("Digite seu nome: ");
+    scanf("%s", usuario.nome);
+    
+    printf("Digite seu sobrenome: ");
+    scanf("%s", usuario.sobrenome);
+    
+    printf("Digite sua idade: ");
+    scanf("%d", &usuario.idade);
+    
+    // 3. Processamento e saída
+    printf("\n=== Resultados ===\n");
+    
+    // a) Manipulação básica de strings
+    printf("\nFrase original: %s\n", texto);
+    printf("Tamanho: %zu caracteres\n", strlen(texto));
+    
+    // b) Conversão para maiúsculas
+    for(int i = 0; i < strlen(texto); i++) {
+        texto[i] = toupper(texto[i]);
+    }
+    printf("Frase em maiúsculas: %s\n", texto);
+    
+    // c) Divisão em palavras
+    printf("\nPalavras separadas:\n");
+    char *token = strtok(texto, " ");
+    while(token != NULL) {
+        printf("- %s\n", token);
+        token = strtok(NULL, " ");
+    }
+    
+    // d) Dados da struct
+    printf("\nDados do usuário:\n");
+    printf("Nome completo: %s %s\n", usuario.nome, usuario.sobrenome);
+    printf("Idade: %d anos\n", usuario.idade);
+    
+    // e) Verificação de caracteres
+    printf("\nVerificação do primeiro caractere do nome:\n");
+    char primeiro = usuario.nome[0];
+    if(isalpha(primeiro)) {
+        if(isupper(primeiro)) {
+            printf("'%c' é uma letra maiúscula\n", primeiro);
+        } else {
+            printf("'%c' é uma letra minúscula\n", primeiro);
+        }
+    } else {
+        printf("'%c' não é uma letra\n", primeiro);
+    }
+    
+    return 0;
+}
